@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { PlataformasNames } from './PlataformasNames';
 export const Edit = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
-  console.log('aqui,editar juego')
+  // console.log('aqui,editar juego')
   const navigate=useNavigate()
   const [selectedFile, setSelectedFile] = useState(null)
   const [nombreChange, setNameChange] = useState(null)
@@ -49,11 +49,11 @@ export const Edit = () => {
     const obtain_Plataformas=async()=>{
     const response=await fetch(`${apiUrl}plataformas/`)
     const data=await response.json()
-    console.log('dentro de obtainPlataformas')
+    // console.log('dentro de obtainPlataformas')
     setPlataformas(data)
-    console.log('dentro de oP', )
+    // console.log('dentro de oP', )
     setfectAll(prevState => ({ ...prevState, plata: true }))
-    console.log(fectAll)
+    // console.log(fectAll)
     }
     const [generos, setGeneros] = useState([])
     const obtain_Generos=async()=>{
@@ -61,7 +61,7 @@ export const Edit = () => {
       const data=await response.json()
       setGeneros(data)
       setfectAll(prevState => ({ ...prevState, gen: true }))
-      console.log(fectAll)
+      // console.log(fectAll)
     }
     
     const [idiomas, setIdiomas] = useState([])
@@ -70,7 +70,7 @@ export const Edit = () => {
         const data=await response.json()
         setIdiomas(data)
         setfectAll(prevState => ({ ...prevState, idioma: true }))
-        console.log(fectAll)
+        // console.log(fectAll)
       }
     
     const {id}=useParams()
@@ -84,21 +84,21 @@ export const Edit = () => {
       const response=await fetch(`${apiUrl}getInfoGame/${id}/`)
         const data=await response.json()
         setInfo(data)
-        console.log(data)
+        // console.log(data)
       
     }
     const obtainVendedor=async()=>{
       const response=await fetch(`${apiUrl}getNameVendedor/${info.vendedor}/`)
         const data=await response.json()
         setVendedor(data.nombre_usuario)
-        console.log(data.nombre_usuario)
+        // console.log(data.nombre_usuario)
       
     }
    
         
     const namesP=()=>{
         const plataformasSeleccionadas = info.plataformas;
-       console.log(plataformasSeleccionadas)
+      //  console.log(plataformasSeleccionadas)
         const nombresPlataformasSeleccionadas = plataformas
         .filter(p => plataformasSeleccionadas.includes(p.id))
         .map(p => p.nombre);
@@ -108,7 +108,7 @@ export const Edit = () => {
     }
     const namesG=()=>{
         const generosSeleccionadas = info.genero;
-        console.log(generosSeleccionadas)
+        // console.log(generosSeleccionadas)
         const nombresGenerosSeleccionadas = generos
         .filter(g => generosSeleccionadas.includes(g.id))
         .map(g => g.nombre);
@@ -154,7 +154,7 @@ export const Edit = () => {
       .filter(p => ids_plataformas.includes(p.id))
       .map(p => p.nombre);
       setPataformasNames(nombresPlataformasSeleccionadas)
-      console.log(nombresPlataformasSeleccionadas)
+      // console.log(nombresPlataformasSeleccionadas)
       
     }
 
@@ -171,7 +171,7 @@ export const Edit = () => {
       .filter(g => ids_generos.includes(g.id))
       .map(g => g.nombre);
       setGenerosNames(nombresGenerosSeleccionadas)
-      console.log(nombresGenerosSeleccionadas)
+      // console.log(nombresGenerosSeleccionadas)
       
     }
     const IdiomasChange=(event)=>{
@@ -186,11 +186,11 @@ export const Edit = () => {
       .filter(i => ids_idiomas.includes(i.id))
       .map(i => i.nombre);
       setIdiomasNames(nombresIdiomasSeleccionadas)
-      console.log(nombresIdiomasSeleccionadas)
+      // console.log(nombresIdiomasSeleccionadas)
       
     }
     const imageChange=(event)=>{
-      console.log(event.target.files[0])
+      // console.log(event.target.files[0])
       setSelectedFile(event.target.files[0])
     }
 
@@ -239,7 +239,7 @@ export const Edit = () => {
           formData.append('image', resizedImageDataUrl);
         }
       if(nombreChange!=null){
-        console.log(nombreChange)
+        // console.log(nombreChange)
         formData.append('nombre',nombreChange)
       }
       if(descripcion!=null){
@@ -247,25 +247,25 @@ export const Edit = () => {
         formData.append('descripcion',descripcion)
       }
       if(plataformasChange!=null){
-        console.log(plataformasChange)
+        // console.log(plataformasChange)
         plataformasChange.map((id)=>{
           formData.append("plataformas", id);
         })
       }
       if(generosChange!=null){
-        console.log(generosChange)
+        // console.log(generosChange)
           generosChange.map((id)=>{
           formData.append("genero", id);
         })
       }
       if(idiomasChange!=null){
-        console.log(idiomasChange)
+        // console.log(idiomasChange)
           idiomasChange.map((id)=>{
           formData.append("idiomas", id);
         })
       }
       if(descripcion!=null){
-        console.log(descripcion)
+        // console.log(descripcion)
         formData.append('descripcion',descripcion)
       }
     
@@ -289,7 +289,7 @@ export const Edit = () => {
           }
         });
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         navigate("/mygames")
         localStorage.removeItem('plataformas')
         localStorage.removeItem('generos')
@@ -315,7 +315,7 @@ export const Edit = () => {
       obtain_Idiomas()
 
       obtainInfo()
-      console.log(info)
+      // console.log(info)
         
         
       setLoading(false)
@@ -327,7 +327,7 @@ export const Edit = () => {
    
 
       
-      console.log(info)
+      // console.log(info)
         
         
      
@@ -356,6 +356,10 @@ export const Edit = () => {
       obtain_money_wallet(user['user_id'])
   }
     }, [])
+
+    const goStripeMoney = () => {
+      navigate("/rechargewallet")
+    }
   return (
     <>
     <div className="flex flex-col min-h-screen">
@@ -545,7 +549,7 @@ export const Edit = () => {
           <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-lg rounded-md">
             <div className="modal-content">
               <h3 className="modal-title text-center text-2xl font-semibold mb-4">
-               Mi cuenta
+              Mi cuenta: {user&& user['username']}
               </h3>
               {account.wallet ? (
                 <MuiButton className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
@@ -556,14 +560,20 @@ export const Edit = () => {
                   Crear user en stripe
                 </MuiButton>
               )}
-              <MuiButton onClick={logoutUser} className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
-                Logout
-              </MuiButton>
+
+              {account.wallet &&
+                <MuiButton onClick={()=>goStripeMoney()} className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
+               Ingresar Dinero
+            </MuiButton>
+              }
               <MuiButton onClick={handleMyGamesClick} className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
                 Mis juegos
               </MuiButton>
+              <MuiButton onClick={logoutUser} className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
+                Logout
+              </MuiButton>
               <MuiButton onClick={handleModalClose} className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
-                Cerrar Modal
+                Cerrar 
               </MuiButton>
             </div>
           </div>

@@ -30,7 +30,7 @@ export const MyGames = () => {
 
 
   const handleOrderChange = (order) => {
-    console.log('hola')
+    // console.log('hola')
     setSelectedOrder(order);
   };
 
@@ -86,13 +86,13 @@ export const MyGames = () => {
 
       let data = await response.json();
 
-      console.log(data.noVisto); // Verifica que el valor de data.noVisto sea correcto
+      // console.log(data.noVisto); // Verifica que el valor de data.noVisto sea correcto
 
 
       setVisto(data.noVisto);
 
     } catch (error) {
-      console.log('Error en la solicitud:', error);
+      // console.log('Error en la solicitud:', error);
     }
   };
   useEffect(() => {
@@ -108,7 +108,7 @@ export const MyGames = () => {
     if (account && account.wallet) {
       setWallet(account.wallet);
       myGames();
-      console.log('visto', visto)
+      // console.log('visto', visto)
     }
   }, [account, wallet]);
   const colWidth = showFilter ? 'w-90' : 'w-100';
@@ -147,7 +147,7 @@ export const MyGames = () => {
         );
       }
   
-      console.log('entra', filteredGames);
+      // console.log('entra', filteredGames);
   
       setJuegos(filteredGames);
     }
@@ -170,7 +170,7 @@ export const MyGames = () => {
     navigate("/createuserstripe")
   }
   const goStripeMoney = () => {
-    navigate("/test1")
+    navigate("/rechargewallet")
   }
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -282,7 +282,7 @@ export const MyGames = () => {
           <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-lg rounded-md">
             <div className="modal-content">
               <h3 className="modal-title text-center text-2xl font-semibold mb-4">
-                My Account
+              Mi cuenta: {user&& user['username']}
               </h3>
               {account.wallet ? (
                 <MuiButton className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
@@ -303,13 +303,13 @@ export const MyGames = () => {
               </MuiButton>
            
               <MuiButton onClick={handleMyGamesClick} className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
-                My Games
+                MIS JUEGOS
               </MuiButton>
               <MuiButton onClick={logoutUser} className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
                 Logout
               </MuiButton>
               <MuiButton onClick={handleModalClose} className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
-                Cerrar Modal
+                Cerrar 
               </MuiButton>
             </div>
           </div>

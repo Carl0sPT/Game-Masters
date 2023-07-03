@@ -92,6 +92,8 @@ const [emailTocado, setEmailTocado] = useState(false);
       setMensajeError(''); // Limpia el mensaje de error si todo está bien
     }
   };
+  const [showPassword, setShowPassword] = useState(false);
+  const toggleShowPassword = () => setShowPassword(!showPassword);
   return (
     <>
     <Navbar/>
@@ -120,12 +122,45 @@ const [emailTocado, setEmailTocado] = useState(false);
           <input type="text" className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" name="username" placeholder="Username" onChange={handleUsernameChange} />
         </div>
         <div>
-          <label htmlFor="password" className="sr-only">Password</label>
-          <input type="password" className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" ref={password1} name="password" placeholder="*******" onChange={handlePasswordChange} onFocus={handlePasswordFocus} onBlur={handlePasswordBlur} />
-          {campoTocado && !contraseñaSegura && (
-            <p className="text-red-600 text-sm">La contraseña debe tener al menos 8 caracteres.</p>
-          )}
-        </div>
+      <label htmlFor="password" className="sr-only">Password</label>
+      <div className="relative">
+        <input
+          type={showPassword ? "text" : "password"}
+          className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+          name="password"
+          placeholder="*******"
+          ref={password1}
+          onChange={handlePasswordChange}
+          onFocus={handlePasswordFocus}
+          onBlur={handlePasswordBlur}
+        />
+        <button
+          type="button"
+          className="absolute right-0 top-0 mr-2 mt-3 focus:outline-none"
+          onClick={toggleShowPassword}
+        >
+          
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 4c-2.76 0-5 2.24-5 5v2H7a2 2 0 00-2 2v8a2 2 0 002 2h10a2 2 0 002-2v-8a2 2 0 00-2-2h-1V9c0-2.76-2.24-5-5-5z"
+            />
+          </svg>
+          
+        </button>
+      </div>
+      {campoTocado && !contraseñaSegura && (
+        <p className="text-red-600 text-sm">La contraseña debe tener al menos 8 caracteres.</p>
+      )}
+    </div>
         <div>
           <label htmlFor="password" className="sr-only">ConfirmPassword</label>
           <input

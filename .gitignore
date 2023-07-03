@@ -8,4 +8,4 @@ __pycache__/
 back/users/migrations/
 back/games/migrations/
 __pycache__/
-
+/.env/

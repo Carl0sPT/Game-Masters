@@ -48,7 +48,7 @@ export const Rutas = () => {
        
        
         <Route path="/edit/:id" element={<Edit />} ></Route>
-        <Route path="/test1" element={<RechargeForm />} ></Route>
+        <Route path="/rechargewallet" element={<RechargeForm />} ></Route>
         <Route path="/CreateGame" element={<CreateGame />} ></Route>
         <Route path="/mypays" element={<MisPagos />} ></Route>
         <Route path="/mygames" element={<MyGames />} ></Route>

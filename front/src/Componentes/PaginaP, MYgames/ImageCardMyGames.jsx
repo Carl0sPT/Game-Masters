@@ -111,7 +111,7 @@ export const ImageCardMyGames = ({ imageInfo }) => {
             });
           }
         } catch (error) {
-          console.log('Error en la solicitud:', error.message);
+          // console.log('Error en la solicitud:', error.message);
           toast.error('Ha ocurrido un error al eliminar el juego', {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 3000, // Duración de la notificación en milisegundos

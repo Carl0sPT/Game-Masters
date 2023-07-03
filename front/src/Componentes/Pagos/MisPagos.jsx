@@ -10,7 +10,7 @@ import { NameGame } from './NameGame'
 import { parseISO, compareAsc,compareDesc } from 'date-fns';
 export const MisPagos = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
-  console.log('aqui,mis pagos')
+  // console.log('aqui,mis pagos')
     const {user,check_visto,ObtainAccount,account,handleMyGamesClick ,logoutUser,obtain_money_wallet, myMoney}=useContext(Contexto)
 
     const [pays, setPays] = useState([])
@@ -27,7 +27,7 @@ export const MisPagos = () => {
    
 
     setPays(data)
-    console.log('aqui',data)
+    // console.log('aqui',data)
     }
 
     useEffect(() => {
@@ -56,13 +56,13 @@ export const MisPagos = () => {
   
       let data = await response.json();
   
-      console.log(data.noVisto); // Verifica que el valor de data.noVisto sea correcto
+      // console.log(data.noVisto); // Verifica que el valor de data.noVisto sea correcto
   
   
       setVisto(data.noVisto);
   
     } catch (error) {
-      console.log('Error en la solicitud:', error);
+      // console.log('Error en la solicitud:', error);
     }
   };
   useEffect(() => {
@@ -93,7 +93,7 @@ const goPays = () => {
   navigate("/mypays")
 }
   const goStripeMoney = () => {
-    navigate("/test1")
+    navigate("/rechargewallet")
   }
   const goStripe=()=>{
     navigate("/createuserstripe")
@@ -279,7 +279,7 @@ const goPays = () => {
                 Logout
               </MuiButton>
               <MuiButton onClick={handleModalClose} className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
-                Cerrar Modal
+                Cerrar
               </MuiButton>
             </div>
           </div>

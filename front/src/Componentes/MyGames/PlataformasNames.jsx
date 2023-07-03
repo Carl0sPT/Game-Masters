@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState ,useEffect} from 'react'
 export const PlataformasNames = ({plataformas,selectedIds,onChange,id_juego,info}) => {
-  console.log(info,'aqui222222222')
+  // console.log(info,'aqui222222222')
   const [pataformas, setPataformasNames] = useState('')
  
   // const obtainInfo=async(id)=>{
@@ -14,7 +14,7 @@ export const PlataformasNames = ({plataformas,selectedIds,onChange,id_juego,info
 
   const namesP=()=>{
     const plataformasSeleccionadas = info.plataformas;
-   console.log(plataformasSeleccionadas)
+  //  console.log(plataformasSeleccionadas)
     const nombresPlataformasSeleccionadas = plataformas
     .filter(p => plataformasSeleccionadas.includes(p.id))
     .map(p => p.nombre);
@@ -30,7 +30,7 @@ export const PlataformasNames = ({plataformas,selectedIds,onChange,id_juego,info
   
       namesP()
     
-    console.log(plataformas,'aqui')
+    // console.log(plataformas,'aqui')
   
  
     

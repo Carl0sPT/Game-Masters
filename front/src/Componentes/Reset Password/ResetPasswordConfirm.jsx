@@ -6,6 +6,9 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 const ResetPasswordConfirm = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const toggleShowPassword = () => setShowPassword(!showPassword);
+  
   const apiUrl = import.meta.env.VITE_API_URL;
   const navigate=useNavigate()
   const [password, setPassword] = useState("");
@@ -48,7 +51,7 @@ const ResetPasswordConfirm = () => {
         { password, confirm_password: confirmPassword }
       );
       setMessage(response.data.message);
-      console.log('data',uidb64,token)
+      // console.log('data',uidb64,token)
       toast.success('Contraseña cambiada correctamente', {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000, 
@@ -59,7 +62,7 @@ const ResetPasswordConfirm = () => {
       });
       navigate('/login')
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       toast.error('Ha ocurrido un problema al realizar el proceso de reseteo de contraseña, por favor vuelva a introducir su correo.', {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 5000, 
@@ -84,22 +87,44 @@ const ResetPasswordConfirm = () => {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <input type="hidden" name="remember" defaultValue="true" />
           <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Contraseña
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Nueva contraseña"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
+          <div>
+      <label htmlFor="password" className="sr-only">
+        Contraseña
+      </label>
+      <div className="relative">
+        <input
+          id="password"
+          name="password"
+          type={showPassword ? "text" : "password"}
+          autoComplete="current-password"
+          required
+          className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+          placeholder="Nueva contraseña"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button
+          type="button"
+          className="absolute right-0 top-0 mr-2 mt-3 focus:outline-none"
+          onClick={toggleShowPassword}
+        >
+           <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 4c-2.76 0-5 2.24-5 5v2H7a2 2 0 00-2 2v8a2 2 0 002 2h10a2 2 0 002-2v-8a2 2 0 00-2-2h-1V9c0-2.76-2.24-5-5-5z"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
             <div>
               <label htmlFor="confirm-password" className="sr-only">
                 Confirmar contraseña

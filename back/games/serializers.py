@@ -12,7 +12,7 @@ class UpdateGamesSerializer(serializers.ModelSerializer):
 class GamesSerializer(serializers.ModelSerializer):
     class Meta:
         model=Juegos
-        fields=('id','vendedor','nombre','descripcion','plataformas','genero','idiomas','num_llaves','precio', 'precio_venta_final','precio_mercado','image','publicacion')
+        fields=('id','vendedor','nombre','descripcion','plataformas','genero','idiomas','num_llaves','precio', 'precio_venta_final','precio_mercado','image','publicacion','contador')
 
 class UpdateGamesSerializer(serializers.ModelSerializer):
     class Meta:

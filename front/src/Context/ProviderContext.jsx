@@ -12,13 +12,13 @@ export const ProviderContext = ({ children }) => {
   //USER
 
   const [user, setUser] = useState(()=>localStorage.getItem('authTokens') ? jwt_decode(localStorage.getItem('authTokens')):null)
-  console.log(user)
+  // console.log(user)
   const [authTokens, setAuthTokens] = useState(()=>localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')):null)
   const [loading, setLoading] = useState(true)
 
   const navigate=useNavigate()
   const updateTokens=async ()=>{
-    console.log('update')
+    // console.log('update')
     let response= await fetch(`${apiUrl}api/token/refresh/`,{
       method: 'POST',
       headers:{
@@ -28,8 +28,8 @@ export const ProviderContext = ({ children }) => {
     })
     let data= await response.json()
     if(response.status===200){
-      console.log('esta',data)
-      console.log(String(authTokens.access))
+      // console.log('esta',data)
+      // console.log(String(authTokens.access))
       setAuthTokens(data)
       setUser(jwt_decode(data.access))
       localStorage.setItem('authTokens',JSON.stringify(data))
@@ -69,20 +69,20 @@ export const ProviderContext = ({ children }) => {
   }
   //logout
   const logoutUser=()=>{
-    console.log("Antes de setAuthTokens:", authTokens);
+    // console.log("Antes de setAuthTokens:", authTokens);
     setAuthTokens(null);
-    console.log("Después de setAuthTokens:", authTokens);
+    // console.log("Después de setAuthTokens:", authTokens);
     setUser(null)
     localStorage.removeItem('authTokens')
     navigate("/login")
    
   }
   useEffect(() => {
-    console.log('aqui',authTokens);
+    // console.log('aqui',authTokens);
   }, [authTokens]);
 
 useEffect(()=>{
-  console.log('up')
+  // console.log('up')
   // if(loading){
   //   updateTokens()
   // }
@@ -115,7 +115,7 @@ const Registrar=async(e)=>{
     let data = await response.json();
 
     if (response.ok) {
-      toast.success('Se ha completado el registro correctamente', {
+      toast.success('Se ha completado el registro correctamente,revisa tu correo electronico para verificar tu cuenta.', {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000, // Duración de la notificación en milisegundos
         hideProgressBar: true, // Ocultar barra de progreso
@@ -157,7 +157,7 @@ const Registrar=async(e)=>{
         },
       });
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       console.error(error);
     }
@@ -232,7 +232,7 @@ const uploadGame = async (e) => {
       formData.append("num_llaves", e.target.num_llaves.value);
       // formData.append("publicado", e.target.publicado.value);
       formData.append("precio", e.target.precio.value);
-    console.log(user.user_id)
+
   
       try {
         const response = await fetch(`${apiUrl}game/upload/`, {
@@ -243,7 +243,7 @@ const uploadGame = async (e) => {
           },
         });
         const data = await response.json();
-        console.log(data);
+      
         navigate("/mygames")
       } catch (error) {
         console.error(error);
@@ -317,13 +317,13 @@ const [countries, setCountries] = useState([])
         currency:country.currencies ? country.currencies[0].code:''
     
       }))
-      console.log(data1)
+ 
       setCountries(data1)
     }
 ///////////// MoneyWallet
 const [myMoney, setMyMoney] = useState([])
 const obtain_money_wallet=async(id_user)=>{
-console.log('AQUIIII',id_user)
+
   let response=await fetch(`${apiUrl}wallet/${id_user}/`,{
     method:'GET',
     headers:{
@@ -333,7 +333,7 @@ console.log('AQUIIII',id_user)
   })
     let data=await response.json()
  
-    console.log(data['balance'])
+  
     setMyMoney(data['balance'])
 
 }
@@ -357,16 +357,20 @@ const updatedPrices=async()=>{
 }
 
 // ////////Actualizar precios (Comentar hasta tener claro el tiempo)
-useEffect(() => {
-  
-  const interval = setInterval(() => {
-    updatedPrices()
-    console.log('prices')
-  }, 60000);
-  return () => {
-    clearInterval(interval);
-  };
-}, [])
+// const [intervalId, setIntervalId] = useState(null);
+// // 1440 * 60 * 1000
+// useEffect(() => {
+//   const newIntervalId = setInterval(() => {
+//     updatedPrices();
+//     console.log('prices');
+//   }, 1440 * 60 * 1000);
+
+//   setIntervalId(newIntervalId);
+
+//   return () => {
+//     clearInterval(intervalId);
+//   };
+// }, []);
 
 //////////
 // Comprobar ventas
@@ -386,13 +390,13 @@ try{
     // La wallet se actualizó correctamente
     // Realiza las operaciones necesarias en el frontend
    
-    console.log('La wallet se actualizó correctamente.');
-    console.log(data.data); // Datos adicionales devueltos por la API
+    console.log('Se han vendido juegos y el dinero se transferira a las cuentas.');
+    // console.log(data.data); // Datos adicionales devueltos por la API
   } else {
     // No se pudo actualizar la wallet
     // Realiza las operaciones necesarias en el frontend
-    console.log('No kseeeee pudo actualizar la wallet.');
-    console.log(data.message); // Mensaje de error devuelto por la API
+    console.log('No hay juegos que se puedan vender');
+    // console.log(data.message); // Mensaje de error devuelto por la API
   }
   
 } catch (error) {
@@ -402,17 +406,20 @@ try{
 
    
 }
-useEffect(() => {
-  
-  const interval = setInterval(() => {
-    obtain_vendidos()
-    console.log('vender')
-  }, 120000);
-  return () => {
-    clearInterval(interval);
-  };
-}, [])
+const [intervalId1, setIntervalId1] = useState(null);
 
+useEffect(() => {
+  const newIntervalId1 = setInterval(() => {
+    obtain_vendidos();
+    
+  }, 15000);
+
+  setIntervalId1(newIntervalId1);
+
+  return () => {
+    clearInterval(intervalId1);
+  };
+}, []);
 
 
 ///// Get Ventas
@@ -423,7 +430,7 @@ const obtain_ventas = async (idJuego) => {
     const response = await fetch(`${apiUrl}ventas/${idJuego}/`);
     const data = await response.json();
     // Aquí puedes trabajar con los datos de las ventas
-    console.log(data);
+   
   } catch (error) {
     console.error('Error al obtener las ventas:', error);
   }
@@ -444,7 +451,7 @@ const [game, setGame] = useState([])
       })
       let data = await response.json()
  
-      console.log('onlyone',data)
+      // console.log('onlyone',data)
   
       setGame(()=>{
         const url_portada = URL.createObjectURL(data.url_portada)
@@ -473,10 +480,10 @@ const [userName, setUserName] = useState([])
       })
       let data = await response.json()
  
-      console.log('onlyone',data)
+      // console.log('onlyone',data)
   
       setUserName(data.nombre_usuario)
-      console.log(data.nombre_usuario)
+      // console.log(data.nombre_usuario)
     }
 
 //////////////////////InfoLog
@@ -493,7 +500,7 @@ const [account, setAccount] = useState({ account: '', wallet: '' });
 
   
       setAccount({ account: data.account, wallet: data.wallet });
-      console.log('hola',data.account,'aqii',data.wallet)
+      // console.log('hola',data.account,'aqii',data.wallet)
     }
     const [visto, setVisto] = useState({ noVisto: false });
     const ObtainInfoLog = async (id_user) => {
@@ -507,13 +514,13 @@ const [account, setAccount] = useState({ account: '', wallet: '' });
     
         let data = await response.json();
     
-        console.log(data.noVisto); // Verifica que el valor de data.noVisto sea correcto
+        // console.log(data.noVisto); // Verifica que el valor de data.noVisto sea correcto
     
       
           setVisto({ noVisto: data.noVisto });
         
       } catch (error) {
-        console.log('Error en la solicitud:', error);
+        // console.log('Error en la solicitud:', error);
       }
     };
 
@@ -528,12 +535,12 @@ const [account, setAccount] = useState({ account: '', wallet: '' });
       })
       if (response.ok) {
         // El código de estado es exitoso (por ejemplo, 200)
-        console.log('Visto actualizado correctamente');
+        // console.log('Visto actualizado correctamente');
       } else {
-        console.log('Error al actualizar el visto');
+        // console.log('Error al actualizar el visto');
       }
     } catch (error) {
-      console.log('Error en la solicitud:', error);
+      // console.log('Error en la solicitud:', error);
     }
     }
 

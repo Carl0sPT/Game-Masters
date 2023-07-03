@@ -36,7 +36,7 @@ export const Navbar = ({handleModalOpen,visto}) => {
           className="text-white"
           activeClassName="text-blue-400"
         >
-          Inicio
+        Inicio
         </NavLink>
        
         <NavLink
@@ -44,7 +44,7 @@ export const Navbar = ({handleModalOpen,visto}) => {
           className="text-white"
           activeClassName="text-blue-400"
         >
-         Información
+          Politica
         </NavLink>
         {!user &&
         <NavLink
@@ -87,13 +87,14 @@ export const Navbar = ({handleModalOpen,visto}) => {
 >
   Inicio
 </NavLink>
-            <a
-              href="#"
-              className="block text-white px-4 py-2"
-              onClick={toggleMenu}
-            >
-              Sobre Nosotros
-            </a>
+<NavLink
+                to="/informacion/"
+                className="block text-white px-4 py-2"
+                activeClassName="text-blue-400"
+                onClick={toggleMenu}
+              >
+                Politica
+              </NavLink>
             {user && (
               <IconButton
                 onClick={() => {

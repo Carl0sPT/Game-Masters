@@ -6,7 +6,7 @@ export const Plataformas = () => {
  const {obtain_Plataformas,plataformas}=useContext(Contexto)
     useEffect(() => {
         obtain_Plataformas()
-        console.log(plataformas)
+        // console.log(plataformas)
     }, [])
     
   return (

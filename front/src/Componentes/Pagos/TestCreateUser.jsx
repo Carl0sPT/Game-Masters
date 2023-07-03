@@ -37,7 +37,7 @@ export const TestCreateUser = () => {
     });
 
     const data = await response.json();
-    console.log(data)
+    // console.log(data)
     setEmail(data)
   }
   const handleSubmit = async (event) => {
@@ -79,7 +79,7 @@ export const TestCreateUser = () => {
         progressClassName: 'bg-red-200',
       });
     }
-    console.log(data)
+    // console.log(data)
   }
   useEffect(() => {
     emailUser(user['user_id'])
@@ -108,13 +108,13 @@ export const TestCreateUser = () => {
   
       let data = await response.json();
   
-      console.log(data.noVisto); // Verifica que el valor de data.noVisto sea correcto
+      // console.log(data.noVisto); // Verifica que el valor de data.noVisto sea correcto
   
   
       setVisto(data.noVisto);
   
     } catch (error) {
-      console.log('Error en la solicitud:', error);
+      // console.log('Error en la solicitud:', error);
     }
   };
   useEffect(() => {
@@ -135,7 +135,7 @@ const goPays = () => {
   navigate("/mypays")
 }
   const goStripeMoney = () => {
-    navigate("/test1")
+    navigate("/rechargewallet")
   }
   const goStripe=()=>{
     navigate("/create-user-stripe")
@@ -160,7 +160,7 @@ const goPays = () => {
           <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-lg rounded-md">
             <div className="modal-content">
               <h3 className="modal-title text-center text-2xl font-semibold mb-4">
-                Mi cuenta
+              Mi cuenta: {user&& user['username']}
               </h3>
               {account.wallet ? (
                 <MuiButton className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
@@ -189,7 +189,7 @@ const goPays = () => {
                 Logout
               </MuiButton>
               <MuiButton onClick={handleModalClose} className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
-                Cerrar Modal
+                Cerrar
               </MuiButton>
             </div>
           </div>

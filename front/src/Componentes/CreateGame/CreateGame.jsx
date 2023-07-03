@@ -25,7 +25,7 @@ export const CreateGame= () => {
   }, []);
 
 const goIngresar=()=>{
-  navigate("/test1")
+  navigate("/rechargewallet")
 }
 const handleModalOpen = () => {
   setModalOpen(true);
@@ -43,7 +43,7 @@ const goStripe = () => {
   navigate("/create-user-stripe")
 }
 const goStripeMoney = () => {
-  navigate("/test1")
+  navigate("/rechargewallet")
 }
 
     const handleGenerosChange = (event) => {
@@ -107,36 +107,46 @@ const goStripeMoney = () => {
       const ids_idiomas= idiomas.filter((idioma)=>idiomasSeleccionadas.includes(idioma.nombre)).map((idioma) => idioma.id);
      
       const formData = new FormData();
-      formData.append("vendedor",e.target.id.value);
-          formData.append("nombre", e.target.nombre.value);
-          formData.append("descripcion", e.target.descripcion.value);
-          ids_plataformas.map((id)=>{
-            formData.append("plataformas", id);
-          })
-          ids_generos.map((id)=>{
-              formData.append("genero", id);
-          })
-          ids_idiomas.map((id)=>{
-            formData.append("idiomas", id);
-          })
-          
-          formData.append("num_llaves", e.target.num_llaves.value);
-          
-          formData.append("precio", e.target.precio.value);
-      if (e.target.url_portada.files[0]) {
-        const maxWidth = 800;
-        const maxHeight = 800;
-        const resizedImageDataUrl = await resizeImage(e.target.url_portada.files[0], maxWidth, maxHeight);
+      if((e.target.num_llaves.value*e.target.precio.value)*0.10>myMoney) {
+        setComprar(false)
+        setValor(((e.target.num_llaves.value*e.target.precio.value)*0.10).toFixed(2))
+      }else{
+      if (e.target.id.value && e.target.nombre.value && e.target.descripcion.value && ids_plataformas.length && ids_generos.length && ids_idiomas.length && e.target.num_llaves.value && e.target.precio.value && e.target.url_portada.files[0]) {
+        formData.append("vendedor", e.target.id.value);
+        formData.append("nombre", e.target.nombre.value);
+        formData.append("descripcion", e.target.descripcion.value);
+        ids_plataformas.map((id) => {
+          formData.append("plataformas", id);
+        })
+        ids_generos.map((id) => {
+          formData.append("genero", id);
+        })
+        ids_idiomas.map((id) => {
+          formData.append("idiomas", id);
+        })
+      
+        formData.append("num_llaves", e.target.num_llaves.value);
+      
+        formData.append("precio", e.target.precio.value);
+        if (e.target.url_portada.files[0]) {
+          const maxWidth = 800;
+          const maxHeight = 800;
+          const resizedImageDataUrl = await resizeImage(e.target.url_portada.files[0], maxWidth, maxHeight);
           formData.append('image', resizedImageDataUrl);
         }
-  
-      const config = {
+        formData.append("beneficio", (e.target.num_llaves.value*e.target.precio.value)*0.10)
+        formData.append('id_user',user['user_id'])
+       
+        const config = {
           headers: {
-              'Content-Type': 'multipart/form-data',
-             
+            'Content-Type': 'multipart/form-data',
+      
           }
-      };
-      try {
+        };
+     
+
+        
+        try {
           await axios.post(`${apiUrl}game/upload/`, formData, config);
           toast.success('Se ha creado el juego correctamente', {
             position: toast.POSITION.TOP_CENTER,
@@ -146,10 +156,34 @@ const goStripeMoney = () => {
             bodyClassName: 'text-sm',
             progressClassName: 'bg-green-200',
           });
-      } catch (error) {
-          console.log(error);
+          navigate("/mygames")
+        } catch (error) {
+          // console.log(error);
+        }
+      } else {
+        // Mostrar mensaje de error indicando qué campo falta por rellenar
+        let errorMessage = 'Faltan los siguientes campos por rellenar: ';
+        if (!e.target.id.value) errorMessage += 'ID, ';
+        if (!e.target.nombre.value) errorMessage += 'Nombre, ';
+        if (!e.target.descripcion.value) errorMessage += 'Descripción, ';
+        if (!ids_plataformas.length) errorMessage += 'Plataformas, ';
+        if (!ids_generos.length) errorMessage += 'Géneros, ';
+        if (!ids_idiomas.length) errorMessage += 'Idiomas, ';
+        if (!e.target.num_llaves.value) errorMessage += 'Número de llaves, ';
+        if (!e.target.precio.value) errorMessage += 'Precio, ';
+        if (!e.target.url_portada.files[0]) errorMessage += 'Imagen, ';
+        errorMessage = errorMessage.slice(0, -2); // Eliminar la última coma y el espacio
+        toast.info(errorMessage, {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 3000, // Duración de la notificación en milisegundos
+          hideProgressBar: true, // Ocultar barra de progreso
+          className: 'bg-white-500 text-black font-medium rounded-md shadow-lg p-4',
+          bodyClassName: 'text-sm',
+          progressClassName: 'bg-red-200',
+        });;
       }
   }
+}
 
   
   
@@ -175,7 +209,9 @@ const goStripeMoney = () => {
       idLogueado() 
     
   }, [])
-
+const goInformacion=()=>{
+  navigate('/informacion/')
+}
   
   return (
     <>
@@ -196,7 +232,7 @@ const goStripeMoney = () => {
           <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-lg rounded-md">
             <div className="modal-content">
               <h3 className="modal-title text-center text-2xl font-semibold mb-4">
-                Mi cuenta
+              Mi cuenta: {user&& user['username']}
               </h3>
               {account.wallet ? (
                 <MuiButton className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
@@ -218,7 +254,7 @@ const goStripeMoney = () => {
                 Logout
               </MuiButton>
               <MuiButton onClick={handleModalClose} className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
-                Cerrar Modal
+                Cerrar 
               </MuiButton>
             </div>
           </div>
@@ -233,6 +269,10 @@ const goStripeMoney = () => {
     <div className="bg-white text-gray-900 shadow-lg rounded-lg">
       <div className="p-5">
         <form encType="multipart/form-data" onSubmit={uploadGame} className="space-y-6">
+        <div>
+  <p>Te recomendamos leer nuestra política antes de crear un juego</p>
+  <button onClick={goInformacion}className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" type="submit">Politica</button>
+</div>
           <h2 className="text-2xl font-bold mb-2 text-uppercase">Añadir Juego</h2>
           <p>Rellena todos los campos para crearlo</p>
 

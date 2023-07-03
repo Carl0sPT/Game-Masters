@@ -8,7 +8,7 @@ import { Button as MuiButton,Modal} from '@mui/material';
 import { Contexto } from '../../Context/Contexto'
 export const Informacion = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
-  console.log('aqui,info')
+  // console.log('aqui,info')
     const {user,ObtainAccount,account,handleMyGamesClick ,logoutUser,obtain_money_wallet, myMoney} = useContext(Contexto);
 
     const [modalOpen, setModalOpen] = useState(false);
@@ -33,13 +33,13 @@ export const Informacion = () => {
     
         let data = await response.json();
     
-        console.log(data.noVisto); // Verifica que el valor de data.noVisto sea correcto
+        // console.log(data.noVisto); // Verifica que el valor de data.noVisto sea correcto
     
     
         setVisto(data.noVisto);
     
       } catch (error) {
-        console.log('Error en la solicitud:', error);
+        // console.log('Error en la solicitud:', error);
       }
     };
     useEffect(() => {
@@ -62,7 +62,7 @@ export const Informacion = () => {
     
     
     const goStripeMoney = () => {
-      navigate("/test1")
+      navigate("/rechargewallet")
     }
     const goStripe=()=>{
       navigate("/createuserstripe")
@@ -74,50 +74,46 @@ export const Informacion = () => {
   return (
     <>
     <Navbar handleModalOpen={handleModalOpen} visto={visto} />
-    <div className="container mx-auto p-4 h-screen flex flex-col justify-center">
-    <div className="bg-gray-100 rounded-lg shadow-lg p-6 mb-4">
-            <h1 className="text-2xl font-bold mb-4 ">¿Cómo poder crear un juego?</h1>
-            <p className="text-gray-800">
-                En primer lugar deberas crearte una cuenta como cliente nuestro en Stripe, relleneando el formulario correspondiente con los datos que se requieren.
-                Una vez crees una cuenta en stripe ya podremos gestionar tus pagos, y se te creara en nuestra pagina una wallet a la cual podras añadir dinero.
-            </p>
-        </div>
-        <div className="bg-gray-100 rounded-lg shadow-lg p-6 mb-4">
-            <h1 className="text-2xl font-bold mb-4 ">¿Cómo ingresar dinero?</h1>
-            <p className="text-gray-800">
-                Una vez hayas creado tu cuenta en stripe y tengas una wallet, podras realizar un ingreso, desde nuestro funcion 'ingresar dinero', donde una vez hagas un ingreso,
-                lo veremos reflejado en tu cuenta de stripe, y tu podras verlo reflejado en tu wallet, ademas de verlo reflejado en el apartado de "Mis pagos" en tu cuenta.
-            </p>
-        </div>
-        <div className="bg-gray-100 rounded-lg shadow-lg p-6">
-            <h1 className="text-2xl font-bold mb-4 ">¿Como crear venta de llaves de juegos?</h1>
-            <p className="text-gray-800">
-                Al momento de crear un juego, como empresa que te proporciona nuestra plataforma de publicación, nos quedaremos con el
-                10% del total ganado por el total de la venta. Por ejemplo, si vendes 100 llaves a $1 cada una, nos quedaremos con $10 de esos 100$.
-            </p>
-        </div>
+    <div className="container mx-auto p-4 h-screen flex flex-col justify-center overflow-auto">
+  <div className="bg-gray-100 rounded-lg shadow-lg p-6 mb-4">
+    <h1 className="text-2xl md:text-3xl font-bold mb-4">¿Cómo poder crear un juego?</h1>
+    <p className="text-gray-800">
+      En primer lugar deberás crearte una cuenta como cliente nuestro en Stripe, rellenando el formulario correspondiente con los datos que se requieren.
+      Una vez crees una cuenta en Stripe ya podremos gestionar tus pagos, y se te creará en nuestra página una wallet a la cual podrás añadir dinero.
+   </p>
+  </div>
+  <div className="bg-gray-100 rounded-lg shadow-lg p-6 mb-4">
+    <h1 className="text-2xl md:text-3xl font-bold mb-4">¿Cómo ingresar dinero?</h1>
+    <p className="text-gray-800">
+      Una vez hayas creado tu cuenta en Stripe y tengas una wallet, podrás realizar un ingreso desde nuestra función "Ingresar dinero". Una vez hagas un ingreso,
+      lo veremos reflejado en tu cuenta de Stripe, y tú podrás verlo reflejado en tu wallet, además de verlo reflejado en el apartado de "Mis pagos" en tu cuenta.
+    </p>
+  </div>
+  <div className="bg-gray-100 rounded-lg shadow-lg p-6">
+    <h1 className="text-2xl md:text-3xl font-bold mb-4">¿Cómo crear venta de llaves de juegos?</h1>
+    <p className="text-gray-800">
+      Al momento de crear un juego, como empresa que te proporciona nuestra plataforma de publicación, nos quedaremos con el
+      10% del total ganado por el total de la venta. Por ejemplo, si vendes 100 llaves a $1 cada una, nos quedaremos con $10 de esos $100.
+    </p>
+  </div>
 
-        <div className="bg-gray-100 rounded-lg shadow-lg p-6 mt-4">
-            <h1 className="text-2xl font-bold mb-4">¿Como funciona la venta de llaves de juegos?</h1>
-            <p className="text-gray-800">
-                Si compras llaves de juegos, debes tener en cuenta los siguientes puntos:
-            </p>
-            <ul className="list-disc ml-6 mt-2 text-gray-800">
-                <li>El proceso de venta de llaves no se llevará a cabo hasta que todas las llaves vendidas de dicho juego hayan alcanzado 0.</li>
-                <li>El precio de venta será determinado por todos los participantes en la compra, mediante una media proporcional basada en la
-                    cantidad comprada. Quien compre mas llaves tendrá mas poder de decisión sobre el precio mínimo de venta</li>
-               
-                    
-            </ul>
-            <p>Las llaves se venderán al precio de mercado:</p>
-                   
-            <ul className='list-disc ml-6 mt-2 text-gray-800'>
-                  <li> Se venderan una vez el precio de mercado sea igual o mayor al precio minimo de venta calculado anterioremente.</li>
-                  <li>En caso de que en un un máximo de 6 meses no se hayan conseguido vender a dicho precio deseado se venderan por el precio de mercado actual, obtengas o no beneficios.</li>
-          </ul>
-          <p>Una vez se vendan las llaves se ingresara el dinero correspondiente de las ventas a tu wallet.</p>
-        </div>
-    </div>
+  <div className="bg-gray-100 rounded-lg shadow-lg p-6 mt-4">
+    <h1 className="text-2xl md:text-3xl font-bold mb-4">¿Cómo funciona la venta de llaves de juegos?</h1>
+    <p className="text-gray-800">
+      Si compras llaves de juegos, debes tener en cuenta los siguientes puntos:
+    </p>
+    <ul className="list-disc ml-6 mt-2 text-gray-800">
+      <li>El proceso de venta de llaves no se llevará a cabo hasta que todas las llaves vendidas de dicho juego hayan alcanzado 0.</li>
+      <li>El precio de venta será determinado por todos los participantes en la compra, mediante una media proporcional basada en la cantidad comprada. Quien compre más llaves tendrá más poder de decisión sobre el precio mínimo de venta</li>                 
+    </ul>
+    <p className="mt-4">Las llaves se venderán al precio de mercado:</p>                   
+    <ul className='list-disc ml-6 mt-2 text-gray-800'>
+      <li>Se venderán una vez el precio de mercado sea igual o mayor al precio mínimo de venta calculado anteriormente.</li>
+      <li>En caso de que en un máximo de 6 meses no se hayan conseguido vender a dicho precio deseado se venderán por el precio de mercado actual, obtengas o no beneficios.</li>
+    </ul>
+    <p className="mt-4">Una vez se vendan las llaves se ingresará el dinero correspondiente de las ventas a tu wallet.</p>
+  </div>
+</div>
     <Footer/>
     <Transition appear show={modalOpen} as={React.Fragment}>
       <Dialog
@@ -136,7 +132,7 @@ export const Informacion = () => {
           <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-lg rounded-md">
             <div className="modal-content">
               <h3 className="modal-title text-center text-2xl font-semibold mb-4">
-                Mi cuenta
+              Mi cuenta: {user&& user['username']}
               </h3>
               {account.wallet ? (
                 <MuiButton className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
@@ -170,7 +166,7 @@ export const Informacion = () => {
                 Logout
               </MuiButton>
               <MuiButton onClick={handleModalClose} className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
-                Cerrar Modal
+                Cerrar
               </MuiButton>
             </div>
           </div>

@@ -132,7 +132,29 @@ class CrearJuego(APIView):
 
     def post(self, request, *args, **kwargs):
         serializer = GamesSerializer(data=request.data)
+        beneficio = request.data.get("beneficio")
+        id_user=request.data.get("id_user")
+        print(beneficio,id_user)
+        user=NewUser.objects.get(id=id_user)
+        
+        logueado2=Logueado.objects.get(id=1)
+        logueado=Logueado.objects.get(user=user)
+        wallet2=VirtualWallet.objects.get(wallet_user=logueado)
+        wallet2.balance=wallet2.balance-Decimal(beneficio)
+        wallet2.save()
+        wallet=VirtualWallet.objects.get(id=1)
+        wallet.balance+=Decimal(beneficio)
+        wallet.save()
+        logueado.noVisto=True 
+        logueado.save()
+        logueado2.noVisto=True
+        logueado2.save() 
+        pago=userPagos(id_user=logueado2,precio=beneficio,tipo='Crear Juego',visto=False)
 
+        pago.save()
+        pago2=userPagos(id_user=logueado,precio=beneficio,tipo='Crear Juego',visto=False)
+        pago2.save()
+        print('wallet',wallet.balance)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -259,7 +281,7 @@ class UserRegisterView(APIView):
             current_site = get_current_site(request).domain
             relativeLink = reverse('email-verify')
             absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
-            email_body = 'Hi '+user.username + ' Use the link below to verify your email \n' + absurl
+            email_body = 'Hola '+user.username + ' Usa este link para verificar tu correo \n' + absurl
             data = {'email_body': email_body, 'to_email': user.email, 'email_subject': 'Verify your email'}
             Util.send_email(data)
             return Response(user_data, status=status.HTTP_201_CREATED)
@@ -294,7 +316,7 @@ class VerifyEmail(generics.GenericAPIView):
                
             
               
-            return redirect('http://localhost:5173/login') 
+            return redirect(f'{URL_FRONT}#/login') 
         except jwt.ExpiredSignatureError as identifier:
             payload = jwt.decode(token, options={"verify_signature": False})
             user_id = payload['user_id']
@@ -305,8 +327,8 @@ class VerifyEmail(generics.GenericAPIView):
             relativeLink = reverse('email-verify')
             absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
            
-            email_body = 'Hi '+user.username + \
-            ' Use the link below to verify your email \n' + absurl
+            email_body = 'Hola '+user.username + \
+            ' utiliza este link para verificar tu cuenta en Game Masters\n' + absurl
             data = {'email_body': email_body, 'to_email': user.email,
                 'email_subject': 'Verify your email'}
 
@@ -436,10 +458,10 @@ def create_stripe_account(request):
     
 def send_email(to_email, subject, message):
     # nuhiruvlmdpnkyvg
-    from_email = 'confirmemailgm@gmail.com'
+    from_email = 'gamemasters893@gmail.com'
     smtp_server = 'smtp.gmail.com'
     smtp_port = 587
-    smtp_username = 'confirmemailgm@gmail.com'
+    smtp_username = 'gamemasters893@gmail.com'
     smtp_password = 'nuhiruvlmdpnkyvg'
 
     msg = MIMEText(message)
@@ -496,13 +518,6 @@ def recharge_wallet(request):
         if intent.status == 'succeeded':
             payment_amount = intent.amount
             currency = intent.currency
-
-            # Construir el mensaje del correo
-            subject = 'Pago exitoso'
-            message = f"¡Tu pago de {payment_amount/100} {currency} ha sido aceptado! Se ha ingresado el dinero a tu wallet."
-
-            # Enviar el correo al cliente
-            send_email(logueado.user.email, subject, message)
             pago=userPagos(id_user=logueado,precio=amount,tipo='Recargar Wallet' ,visto=False)
             pago.save()
             logueado.noVisto=True
@@ -650,9 +665,6 @@ def getWallet(request, id_user):
 
 @api_view(['POST'])
 def getJuegosActivados(request):
-    if request.user.is_authenticated:
-        userName = request.user.username
-        print('user',userName)
     juegos_activados = Juegos.objects.filter(activar=True)
     entro=False
    
@@ -661,7 +673,7 @@ def getJuegosActivados(request):
         
     
 
-        if juego.vendido!=True and float(juego.precio_mercado) >= juego.precio_venta_final:
+        if juego.vendido!=True and float(juego.precio_mercado) >= float(juego.precio_venta_final):
             ventas_juego = Ventas.objects.filter(id_juego=juego)
             for venta in ventas_juego:
 
@@ -690,7 +702,7 @@ def getJuegosActivados(request):
                 print(f"Comprador: {comprador}, Num. de llaves: {num_llaves}")
 
 
-        elif juego.vendido!=True and juego.contador>=4:
+        elif juego.vendido!=True and juego.contador>=6:
             ventas_juego = Ventas.objects.filter(id_juego=juego)
             for venta in ventas_juego:
 
@@ -716,11 +728,13 @@ def getJuegosActivados(request):
                 pago=userPagos(id_user=comprador,id_juego=juego,precio=beneficio,visto=False,tipo='Llaves vendidas')
                 pago.save()
                 print(f"Comprador: {comprador}, Num. de llaves: {num_llaves}")
-        if juego.contador>=4:
-            juego.contador=0
-        else:
-            juego.contador+=1
-        juego.save()
+    # if juego.contador>=12:
+    #     juego.contador=0
+    #     juego.save()
+    # else:
+    #     juego.contador+=1
+    #     juego.save()
+        
     serializer = GamesSerializer(juegos_activados, many=True)
     if entro:
            
@@ -744,19 +758,27 @@ def getJuegosActivados(request):
 # Update precios
 
 @api_view(['POST'])
-def getUpdatePrice(request):
-    juegos = Juegos.objects.all()
-    
-    for juego in juegos:
-        print(f"anterior {juego.precio_mercado}")
-        precio=round(random.uniform(0, 5), 2)
+def getUpdatePrice(request,id_juego):
+    print('aquiii',id_juego)
+    juego = Juegos.objects.get(id=id_juego)
+    print(juego)
+ 
+    # print(f"anterior {juego.precio_mercado}")
+    precio=round(random.uniform(0, 5), 2)
+    if(juego.vendido!=True and juego.id!=24):
         juego.precio_mercado = precio
-        juego.save()
+    
+    if(juego.activar and juego.vendido!=True):
+        juego.contador+=1
         
-       
-        newPrice=PriceHistory(id_juego=juego,precio=precio)
-        newPrice.save()
-    serializer = GamesSerializer(juegos, many=True)
+    juego.save()
+   
+
+    
+    
+    newPrice=PriceHistory(id_juego=juego,precio=precio)
+    newPrice.save()
+    serializer = GamesSerializer(juego)
     return Response(serializer.data)
 
 

@@ -15,7 +15,7 @@ const RechargeForm = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
     const {user,ObtainAccount,account,handleMyGamesClick ,logoutUser,obtain_money_wallet, myMoney} = useContext(Contexto);
     const onRechargeSuccess=(response)=> {
-        console.log(response); // Aquí puedes hacer lo que quieras con la respuesta del servidor
+        // console.log(response); // Aquí puedes hacer lo que quieras con la respuesta del servidor
        
         toast.success('Se ha recargado correctamente tu wallet', {
           position: toast.POSITION.TOP_CENTER,
@@ -51,18 +51,9 @@ const RechargeForm = () => {
       card: elements.getElement(CardNumberElement),
     });
 
-    if (error) {
-      toast.error(error.message, {
-        position: toast.POSITION.TOP_CENTER,
-        autoClose: 3000, // Duración de la notificación en milisegundos
-        hideProgressBar: true, // Ocultar barra de progreso
-        className: 'bg-red-500 text-white font-medium rounded-md shadow-lg p-4',
-        bodyClassName: 'text-sm',
-        progressClassName: 'bg-red-200',
-      });
-    } else {
-      console.log('[PaymentMethod]', paymentMethod);
-    }
+    
+      // console.log('[PaymentMethod]', paymentMethod);
+    
  
     const response = await fetch(`${apiUrl}api/recharge_wallet/`, {
       method: 'POST',
@@ -73,7 +64,7 @@ const RechargeForm = () => {
     });
 
     const data = await response.json();
-
+    // console.log(data)
     if (data.success) {
     
       onRechargeSuccess(data);
@@ -104,13 +95,13 @@ const RechargeForm = () => {
   
       let data = await response.json();
   
-      console.log(data.noVisto); // Verifica que el valor de data.noVisto sea correcto
+      // console.log(data.noVisto); // Verifica que el valor de data.noVisto sea correcto
   
   
       setVisto(data.noVisto);
   
     } catch (error) {
-      console.log('Error en la solicitud:', error);
+      // console.log('Error en la solicitud:', error);
     }
   };
   useEffect(() => {
@@ -162,7 +153,7 @@ useEffect(() => {
           <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-lg rounded-md">
             <div className="modal-content">
               <h3 className="modal-title text-center text-2xl font-semibold mb-4">
-                My Account
+              Mi cuenta: {user&& user['username']}
               </h3>
               {account.wallet ? (
                 <MuiButton className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
@@ -190,13 +181,13 @@ useEffect(() => {
               }
            
               <MuiButton onClick={handleMyGamesClick} className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
-                My Games
+                MIS JUEGOS
               </MuiButton>
               <MuiButton onClick={logoutUser} className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
                 Logout
               </MuiButton>
               <MuiButton onClick={handleModalClose} className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
-                Cerrar Modal
+                Cerrar
               </MuiButton>
             </div>
           </div>

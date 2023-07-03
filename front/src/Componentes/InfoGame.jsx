@@ -37,7 +37,7 @@ const goLogin=()=>{
   navigate("/login")
 }
   const ObtainGame = async (idJuego) => {
-    console.log('dentro', idJuego)
+    // console.log('dentro', idJuego)
     let response = await fetch(`${apiUrl}juego/${idJuego}/`, {
 
       method: 'GET',
@@ -47,7 +47,7 @@ const goLogin=()=>{
 
     })
     let data = await response.json()
-    console.log('onlyone', data)
+    // console.log('onlyone', data)
 
     setGame(data)
 
@@ -57,10 +57,10 @@ const goLogin=()=>{
       const response = await fetch(`${apiUrl}ventas/${idJuego}/`);
       const data = await response.json();
       // Aquí puedes trabajar con los datos de las ventas
-      console.log(data);
+      // console.log(data);
       setGameLoaded(false)
     } catch (error) {
-      console.error('Error al obtener las ventas:', error);
+      // console.error('Error al obtener las ventas:', error);
     }
   };
   const comprar = async (price, vendedor, id_juego) => {
@@ -69,7 +69,7 @@ const goLogin=()=>{
     // console.log(id_juego)
     // console.log(num_llaves.current.value)
     if(game.precio *num_llaves.current.value>myMoney){
-      console.log('noMoney')
+      // console.log('noMoney')
       setComprar(false)}else if(game.num_llaves==0){
         toast.success('No hay llaves disponibles', {
           position: toast.POSITION.TOP_CENTER,
@@ -80,7 +80,7 @@ const goLogin=()=>{
           progressClassName: 'bg-green-200',
         });
       }else{
-    console.log(final_price.current.value)
+    // console.log(final_price.current.value)
     let response = await fetch(`${apiUrl}update-wallets/`, {
       method: 'POST',
       headers: {
@@ -107,11 +107,11 @@ const goLogin=()=>{
         bodyClassName: 'text-sm',
         progressClassName: 'bg-green-200',
       });
-      navigate("/mygames")
+      navigate(`/infogame/${id.id}`)
     }
     await ObtainGame(id.id)
     
-    console.log(data)
+    // console.log(data)
   }
 
   }
@@ -130,7 +130,7 @@ const goLogin=()=>{
 
 
   useEffect(() => {
-    console.log('Primero', id.id)
+    // console.log('Primero', id.id)
 
     ObtainGame(id.id)
     
@@ -141,7 +141,7 @@ const goLogin=()=>{
   }, [])
 
   useEffect(() => {
-    console.log('SEGUNDO', game)
+    // console.log('SEGUNDO', game)
     // console.log(user['user_id'])
     if(user){
     obtain_money_wallet(user['user_id'])
@@ -149,12 +149,12 @@ const goLogin=()=>{
     if(game!=''){
     ObtainUserName(game.vendedor)
     }
-    console.log(game)
+    // console.log(game)
   }, [game])
 
 
   useEffect(() => {
-    console.log('T', game)
+    // console.log('T', game)
     if (game.num_llaves == 0) {
       obtain_ventas(id.id)
     }
@@ -200,13 +200,13 @@ const goLogin=()=>{
   
       let data = await response.json();
   
-      console.log(data.noVisto); // Verifica que el valor de data.noVisto sea correcto
+      // console.log(data.noVisto); // Verifica que el valor de data.noVisto sea correcto
   
   
       setVisto(data.noVisto);
   
     } catch (error) {
-      console.log('Error en la solicitud:', error);
+      // console.log('Error en la solicitud:', error);
     }
   };
   useEffect(() => {
@@ -216,7 +216,68 @@ const goLogin=()=>{
   
   }, [])
   const goStripeMoney = () => {
-    navigate("/test1")
+    navigate("/rechargewallet")
+  }
+
+  const updatedPrices=async(id_juego)=>{
+    // console.log('precios')
+    let response=await fetch(`${apiUrl}priceUpdate/${id_juego}/`,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+      }
+      
+    })
+      let data=await response.json()
+   
+
+  
+     
+  
+  }
+
+  const obtain_vendidos=async(id_juego)=>{
+
+    try{
+      let response=await fetch(`${apiUrl}active-games/${id_juego}/`,{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+        }
+        
+      })
+      const data = await response.json();
+        
+      if (data.success) {
+        // La wallet se actualizó correctamente
+        // Realiza las operaciones necesarias en el frontend
+       
+        console.log('La wallet se actualizó correctamente.');
+        // console.log(data.data); // Datos adicionales devueltos por la API
+      } else {
+        // No se pudo actualizar la wallet
+        // Realiza las operaciones necesarias en el frontend
+        // console.log('No kseeeee pudo actualizar la wallet.');
+        // console.log(data.message); // Mensaje de error devuelto por la API
+      }
+      
+    } catch (error) {
+      // Manejo de errores de la petición
+      // console.error('Ocurrió un error:', error);
+    }
+  }
+    
+  useEffect(() => {
+    // const fetchData = async () => {
+    //   await obtain_vendidos(id.id);
+    //   setTimeout(() => {
+        updatedPrices(id.id);
+    //   }, 5000);
+    // };
+    // fetchData();
+  }, []);
+  const goInformacion=()=>{
+    navigate('/informacion/')
   }
   return (
     <>
@@ -225,8 +286,13 @@ const goLogin=()=>{
 
       {game !== null && (
   <div className="container mx-auto p-6">
+    
     <div className="flex flex-col items-center">
       <div className="bg-gradient-to-r from-blue-600 to-green-600 shadow-lg rounded-xl p-6 w-full sm:w-4/5">
+      <div>
+  <p>Te recomendamos leer nuestra política antes de comprar llaves de un juego</p>
+  <button onClick={goInformacion}className="inline-flex items-center px-4 py-2  bg-gray-900 border border-transparent text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black-500" type="button">Politica</button>
+</div>
         <div className="flex flex-col sm:flex-row items-center justify-between mx-auto">
           <img
             src={game.image}
@@ -251,6 +317,7 @@ const goLogin=()=>{
               {renderInfoCard('Fecha de Publicación', game.publicacion)}
               {renderInfoCard('Precio de Mercado', game.precio_mercado)}
               {renderInfoCard('Precio Venta Final', game.precio_venta_final)}
+              {renderInfoCard('Meses hasta la venta', game.contador)}
             </div>
             <div className="bg-gray-300 h-px my-5"></div>
             {user && user['username']!=userName &&
@@ -320,7 +387,7 @@ const goLogin=()=>{
                         No tienes fondos suficientes
                       </Dialog.Title>
                       <div className="flex justify-center mt-4">
-                        <NavLink className="nav-link text-dark px-4 py-2 rounded-lg bg-blue-600 text-white" to="/test1">
+                        <NavLink className="nav-link text-dark px-4 py-2 rounded-lg bg-blue-600 text-white" to="/rechargewallet">
                           Ingresar dinero
                         </NavLink>
                         <button className="px-4 py-2 rounded-lg bg-gray-300" onClick={() => setComprar(true)}>
@@ -360,7 +427,7 @@ const goLogin=()=>{
           <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-lg rounded-md">
             <div className="modal-content">
               <h3 className="modal-title text-center text-2xl font-semibold mb-4">
-                Mi cuenta
+              Mi cuenta: {user&& user['username']}
               </h3>
               {account.wallet ? (
                 <MuiButton className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
@@ -394,7 +461,7 @@ const goLogin=()=>{
                 Logout
               </MuiButton>
               <MuiButton onClick={handleModalClose} className="w-full mb-2 text-lg" style={{ fontSize: '18px' }}>
-                Cerrar Modal
+                Cerrar 
               </MuiButton>
             </div>
           </div>

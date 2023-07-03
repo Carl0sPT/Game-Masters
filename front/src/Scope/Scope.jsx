@@ -12,7 +12,7 @@ export const Scope = ({id_juego}) => {
   let myChart = null;
   const chartRef = useRef();
   const obtain_Price_History=async(id_juego)=>{
-    console.log('juego',id_juego)
+    // console.log('juego',id_juego)
     let response=await fetch(`${apiUrl}prices/${id_juego}/`,{
     method:'GET',
     headers:{
@@ -22,7 +22,7 @@ export const Scope = ({id_juego}) => {
   })
     let data=await response.json()
  
-    console.log(data)
+    // console.log(data)
     setPrices(data)
     
   }
@@ -67,7 +67,7 @@ export const Scope = ({id_juego}) => {
 
   const buildChart = () => {
     const myChartRef = chartRef.current.getContext('2d');
-    console.log('aqui',prices)
+    // console.log('aqui',prices)
     // Obtén los datos de precios de tu API de Django REST Framework y guárdalos en un arreglo
     const data =prices
     if (myChart) {
