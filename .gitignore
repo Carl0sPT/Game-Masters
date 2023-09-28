@@ -1,0 +1,11 @@
+
+/data/
+*.pyc
+*.log
+*.sqlite3
+__pycache__/
+*.pyo
+back/users/migrations/
+back/games/migrations/
+__pycache__/
+
